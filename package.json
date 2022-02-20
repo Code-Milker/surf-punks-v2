@@ -1,6 +1,6 @@
 {
   "name": "hardhat-project",
-    "scripts": {
+  "scripts": {
     "deployKovan": "npx hardhat deployKovan --network kovan"
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nomiclabs/hardhat-etherscan": "^2.1.8",
+    "@openzeppelin/contracts": "^4.5.0",
     "@typechain/hardhat": "^3.1.0"
   }
 }
