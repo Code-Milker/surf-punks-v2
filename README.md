@@ -1,48 +1,45 @@
-# Advanced Sample Hardhat Project
+# SurfPunkV2 Smart Contract
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+## Overview
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+The `SurfPunkV2` contract is an ERC-721 compliant non-fungible token (NFT) implementation designed to capture the essence of surf culture in the digital realm. This contract facilitates the minting and management of unique "Surf Punk" NFTs, each representing a distinct digital surfer with its own identity and attributes.
 
-Try running some of the following tasks:
+## Features
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
-```
+1. **ERC-721 Compliance**: Inherits from OpenZeppelin's `ERC721`, ensuring standard NFT functionality and interoperability.
 
-# Etherscan verification
+2. **Enumerable Tokens**: Implements `ERC721Enumerable` to allow enumeration of all tokens, facilitating easy tracking and management.
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+3. **URI Storage**: Utilizes `ERC721URIStorage` for flexible and modifiable token metadata storage, enabling dynamic updates to token information.
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+4. **Ownership Control**: Leverages `Ownable` to restrict certain functions to the contract owner, enhancing security and administrative control.
 
-```shell
-hardhat run --network ropsten scripts/sample-script.ts
-```
+5. **Token Minting**: Includes a `mintTransfer` function that allows an authorized `mintvialAddress` to mint new tokens and assign them to a specified address.
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+6. **Randomization Integration**: Interacts with an external `SurfPunksRandomizer` contract to assign unique identifiers to tokens upon minting, ensuring each NFT is distinct.
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
+7. **Base URI Management**: Provides functionality to set and lock the base URI for token metadata, ensuring consistency and preventing unauthorized changes.
 
-# Performance optimizations
+8. **Contract Locking**: Once locked by the owner, certain contract parameters cannot be modified, enhancing security and immutability.
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+9. **Event Emission**: Emits `CloneXRevealed` events upon token minting, facilitating off-chain processes and integrations.
 
-"ethers@^5.0.0" "@nomiclabs/hardhat-etherscan@^2.1.3" "dotenv@^10.0.0" "eslint@^7.29.0" "eslint-config-prettier@^8.3.0" "eslint-config-standard@^16.0.3" "eslint-plugin-import@^2.23.4" "eslint-plugin-node@^11.1.0" "eslint-plugin-prettier@^3.4.0" "eslint-plugin-promise@^5.1.0" "hardhat-gas-reporter@^1.0.4" "prettier@^2.3.2" "prettier-plugin-solidity@^1.0.0-beta.13" "solhint@^3.3.6" "solidity-coverage@^0.7.16" "@typechain/ethers-v5@^7.0.1" "@typechain/hardhat@^2.3.0" "@typescript-eslint/eslint-plugin@^4.29.1" "@typescript-eslint/parser@^4.29.1" "@types/chai@^4.2.21" "@types/node@^12.0.0" "@types/mocha@^9.0.0" "ts-node@^10.1.0" "typechain@^5.1.2" "typescript@^4.5.2"
+## Contract Details
+
+- **Constructor**: Initializes the contract with the name "SurfPunkV2" and symbol "SurfPunkV2". The token ID counter starts at 1 to avoid using the default value of 0.
+
+- **mintTransfer Function**: Restricted to the `mintvialAddress`, this function mints a new token, assigns it to the specified address, and interacts with the `SurfPunksRandomizer` to obtain a unique identifier for the token.
+
+- **setRandomizerAddress Function**: Allows the contract owner to set the address of the `SurfPunksRandomizer` contract, enabling flexibility in updating the randomization logic.
+
+- **setMintvialAddress Function**: Permits the contract owner to designate the authorized minting address, ensuring only approved entities can mint new tokens.
+
+- **secureBaseUri Function**: Enables the owner to set the base URI for token metadata. This function can only be called if the contract is not locked, allowing updates to metadata storage paths when necessary.
+
+- **lockContract Function**: Once invoked by the owner, it permanently locks the contract, preventing further changes to the base URI and enhancing the security and integrity of the token metadata.
+
+- **tokensOfOwner Function**: Returns an array of token IDs owned by a specific address, aiding in token management and user interfaces by allowing users to view their holdings.
+
+- **Overridden Functions**: Includes standard overrides for `_baseURI`, `_beforeTokenTransfer`, `_burn`, `tokenURI`, and `supportsInterface` to ensure compatibility and extend functionality as needed.
+
+
